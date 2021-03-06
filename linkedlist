@@ -1,0 +1,6 @@
+LinkedList常用方法，有关于removeFirst()和pollFirst()都是查询头，并删除头
+那么区别在于removeFirst在linkedlist为空的时候会抛出异常，
+而pollFirst在linkedlist为空的时候会返回一个null值.
+getFirst() --Returns the first element in this list.
+
+peekFirst() --Retrieves, but does not remove, the first element of this list, or returns null if this list is empty.
