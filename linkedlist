@@ -4,3 +4,7 @@ LinkedList常用方法，有关于removeFirst()和pollFirst()都是查询头，�
 getFirst() --Returns the first element in this list.
 
 peekFirst() --Retrieves, but does not remove, the first element of this list, or returns null if this list is empty.
+list转换int数组
+一般我们转换出来的都是object
+我们要是想换必须
+list.stream().mapToInt(Integer::intValue).toArray();
