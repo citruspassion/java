@@ -1,0 +1,88 @@
+代理模式是设计23模式的一种，他分为静态代理和动态代理，总的来说就是a去通过持有b，可以具有b的行为的一个模式，那么b去实现了一个接口，
+那么a也会去实现这个接口，而b是真正实现类，而a是凭借b的方法去实现。b就相当于黄君，a就是伪军
+
+静态代
+public interface army
+{
+   void attack();
+   }
+public class guizi implements army {
+  publiv void attacked(){
+  System.out.println("鬼子被八路军干翻");}
+}
+
+public class weijun implements army{
+	private army a;
+	
+	public weijun(army a){
+		this.a = a;
+	}
+	@Override
+	public void attacked() {
+		System.out.println("伪军投降");
+		this.a.attacked();
+		System.out.println("日*被中国占领");
+	}
+  总的来说静态代理就是保留目标对象的功能而自己再加点料
+  就比如鬼子被干翻了，伪军在鬼子被干翻的同时，加点料，让鬼子直接消失世界了，中国统一日*岛
+  
+  
+  而动态代理的特点是
+  代理对象不需要实现接口,但是目标对象一定要实现接口,就是a代理的对象不确定，这个就是动态代理
+  就是要生成一个包装类对象，由于代理的对象是动态的，所以叫动态代理
+  根据b的接口生成的实现类代理了InvocationHandle，这个InvocationHandle代理了b，两级代理
+  我们都知道伪军是到处插旗，各处献媚丢尽中国人脸，所以就是伪军可能给鬼子打几枪，又给国军打几枪，所以如果我们的这个伪军类的效力对象不确定就是动态代理
+  代理的对象是根据jdk的api，动态的在内存中构建代理对象
+  
+  
+  代码上伪军不在去实现army,而去实现InvocationHandler
+ public class weijun implements InvocationHandler{
+    private Object a;
+    public weijun( Object a)
+    {
+    this.a=a;
+    }
+    	@Override
+     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
+    {
+        
+        System.out.println("送枪/投降");
+        //InvocationHandler里调用了目标对象的方法，调用之前增强方法。
+        Object result = method.invoke(a, args);
+        
+        return result;
+    }    // 生成代理类
+
+    
+     public Object CreatProxyedObj()
+    {
+        return Proxy.newProxyInstance(a.getClass().getClassLoader(), a.getClass().getInterfaces(), this);
+        //this是InvocationHandler
+    }  
+
+
+
+ }
+实现
+army a=new guizi();
+weijun wei=new weijun(a);
+Object b=weijun.creatProxyedObj();
+army c=(army)b;
+拿到了接口，就可以接口所有的信息，所以我们可以让一个新的对象去接受所有的信息，但是我们我能让a去接收，如果是对象a，我们就没法增强了
+通过CreatProxyedObj创建代理对象，强转为目标对象的接口类型即可使用，实际上生成的代理对象实现了目标接口
+
+
+
+第二种  cglib动态代理
+上述说的通过拿到实现b的接口实现类来获取整个接口的所有信息，然后让一个新的对象去接收这时jdk动态代理的实现思想
+那么我们以前学过继承，通过继承父类我们可以去拿到父类的功能，并通过重写，来满足我们的需求，这就和我们所说的代理有一致性
+因为代理就是保留目标对象的功能的同时再加料，我们能看出来通过继承，保留父类的方法同时可以进行重写，在重写时对这些方法增强 这就是cglib的核心
+实现了一个 MethodInterceptor
+1.需要引入cglib的jar文件,但是Spring的核心包中已经包括了Cglib功能,所以直接在Mava中添加pring-core.jar即可.如果非maven工程需要引入cglib.jar 和asm.jar;
+2.引入功能包后,就可以在内存中动态构建子类
+3.代理的类不能为final,否则报错
+4.目标对象的方法如果为final/static,那么就不会被拦截,即不会执行目标对象额外的业务方法.
+
+如果加入容器的目标对象有实现接口,用JDK代理
+
+如果目标对象没有实现接口,用Cglib代理
