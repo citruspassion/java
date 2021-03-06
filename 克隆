@@ -1,0 +1,35 @@
+克隆的意义
+我们通过new出来的对象的属性都是新的对象，对应的属性没有值。而我们需要进行赋值来让这些属性有值。
+但这样麻烦，所以我们可以通过clone来保留对象的状态
+克隆的步骤
+1.先将目标对象实现cloneable接口
+2.覆盖Object类的clone()方法 （覆盖clone()方法，访问修饰符设为public，默认是protected）；
+3.在clone()方法中调用super.clone()；、
+
+克隆分为深克隆和浅克隆
+浅克隆是指拷贝对象时仅仅拷贝对象本身（包括对象中的基本变量），而不拷贝对象包含的引用指向的对象。
+
+深克隆不仅拷贝对象本身，而且拷贝对象包含的引用指向的所有对象
+深克隆的是实现实际上是对对象的序列化和反序列化
+比如我们有一个学生类和一个教师类，教师类有一个getSutdent setStudent方法
+我们clone出来了一个学生对象，对一个学生对象更改属性，是无法影响互相的
+因为我们的学生类没有指向
+而我们一旦将教师指向了学生，克隆了一个教师类，那么我们对教师类的getStudent，对student进行修改属性
+那么我们被克隆的教师类的学生对象的属性也会被改
+因为我们这时浅克隆，因为不拷贝对象包含的所指向的对象，意思就是我们被克隆和克隆的指向一个对象
+而深克隆是一个平行关系
+浅克隆
+
+@Override
+	public Object clone() throws CloneNotSupportedException {
+	
+		return super.clone();
+	}
+ 深克隆
+ @Override
+    public Object clone() throws CloneNotSupportedException {
+      
+        Teacher teacher = (Teacher)super.clone();
+        teacher.setStudent((Student)teacher.getStudent().clone());
+        return teacher;
+    }
