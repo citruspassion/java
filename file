@@ -1,0 +1,89 @@
+public class file extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (!ServletFileUpload.isMultipartContent(req))
+        {
+           return; //判断这个表单是否携带文件，如果不携带，直接返回
+        }
+        //为了安全性，要将上传的东西，存到客户无法访问的地方比如webif
+        //这里并没有一个叫upload的文件
+        String realPath = this.getServletContext().getRealPath("/WEB-IF/upload");
+        File upLoadFile=new File(realPath);
+        if (!upLoadFile.exists()){
+            upLoadFile.mkdir();
+        }
+        //要弄一个临时保存区
+        String realPath1 = this.getServletContext().getRealPath("/WEB-IF/temp");
+        File temp=new File(realPath1);
+        if (!temp.exists())
+        {
+            temp.mkdir();
+        }
+        //紧接着要处理上传的文件大小和数据，如果太大就不行，所以放在temp里判断了就行，没必要先上传后判断
+        DiskFileItemFactory fileItemFactory=new DiskFileItemFactory();
+        fileItemFactory.setSizeThreshold(1024*1024);//size 1m
+        fileItemFactory.setRepository(temp);
+
+        ServletFileUpload servletFileUpload=new ServletFileUpload(fileItemFactory);
+        servletFileUpload.setProgressListener(new ProgressListener() {
+            //监听上传进度
+            @Override
+            public void update(long l, long l1, int i) {
+                System.out.println("总大小"+l1+"已经上传"+l);
+            }
+        });
+        servletFileUpload.setHeaderEncoding("utf-8");
+        servletFileUpload.setFileSizeMax(1024*1024*10);
+
+        //接着判断后就开始真正的操作，即处理上传
+        try {
+            List<FileItem> fileItemList=servletFileUpload.parseRequest(req);
+            for (FileItem fileItem:fileItemList)
+            {
+                //判断上传的是不是带文件的表单  如果是
+                if (fileItem.isFormField())
+                {
+
+                    //否
+                }else{
+                    String name = fileItem.getName();//拿到input的名字
+                    if (name.trim().equals("")|| StringUtils.isNullOrEmpty(name))
+                    {
+                        continue;
+                    }
+                    //asdasd.123.jpg
+                    String substring = name.substring(name.lastIndexOf("//") + 1);
+                    String substring1 = name.substring(name.lastIndexOf(".") + 1);
+                    String uuidPath = UUID.randomUUID().toString();
+                    String rrealPath=realPath+"/"+uuidPath;
+                    File file=new File(rrealPath);
+                    //意思是放到realpath里的创建一个新文件夹
+                    if (!file.exists())
+                    {
+                        file.mkdir();
+                    }
+                    InputStream inputStream = fileItem.getInputStream();
+                    FileOutputStream fileOutputStream=new FileOutputStream(rrealPath+"/"+substring);
+                    int as=0;
+                    byte []by=new byte[1024];
+                    while ((as=inputStream.read())!=-1)
+                    {
+                        fileOutputStream.write(by,0,as);
+                    }
+                    inputStream.close();
+                    fileOutputStream.close();
+                    fileItem.delete();
+
+                }
+            }
+        } catch (FileUploadException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPost(req, resp);
+    }
+}
