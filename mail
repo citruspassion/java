@@ -40,6 +40,8 @@ public class mail {
         MimeBodyPart text=new MimeBodyPart();
         text.setContent("内容","text/html;charset=utf-8");//
         //需要描述这些数据的关系，有内嵌related,还有添加附件的mixed
+        //mail的框架就是multipart/mixed里面有附件和multipart/related和资源（图片之类的），multipart/related里面有超文本正文。
+        //所以每加一层都是一个嵌套
         MimeMultipart mm=new MimeMultipart();
         mm.addBodyPart(image);
         mm.addBodyPart(text);
