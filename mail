@@ -1,0 +1,58 @@
+public class mail {
+    public static void main(String[] args) throws GeneralSecurityException, MessagingException {
+        Properties properties=new Properties();
+        properties.setProperty("mail.host","smtp.qq.com");
+        properties.setProperty("mail.transport.protocol","smtp");
+        //protocol协议   auth授权
+        properties.setProperty("mail.smtp.auth","true");
+
+        //qq  ali邮件要加密
+        MailSSLSocketFactory sf=new MailSSLSocketFactory();
+       sf.setTrustAllHosts(true);
+        properties.put("mail.smtp.ssl.enable","true");
+        properties.put("mail.smtp.ssl.socketFactory","sf");
+
+        //javamail 5步骤
+        //1.创建定义整体应用程序的环境信息的SEssion 对象
+        Session session=Session.getDefaultInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("","");
+            }
+        });
+        //2.通过session获得transport对象
+        Transport transport = session.getTransport();
+        //3.使用用户名授权码链上邮箱
+        transport.connect("smtp.qq.com","","");
+        //4.创建邮件
+        MimeMessage mimeMessage=new MimeMessage(session);
+        //5.发送有邮件
+        //topic
+        mimeMessage.setSubject("nihao");
+        //内容
+        mimeMessage.setContent("nihao","text/html;charset=utf-8");
+        //准备图片数据  由于图片需要处理所以应该进行一些对应的数据处理
+        MimeBodyPart image=new MimeBodyPart();
+        DataHandler date=new DataHandler(new FileDataSource("//你要的图片地址"));
+        image.setDataHandler(date);
+        image.setContentID("bz.jgp");//和fi'le一样也要给他一个对应的id
+        //正文
+        MimeBodyPart text=new MimeBodyPart();
+        text.setContent("内容","text/html;charset=utf-8");//
+        //需要描述这些数据的关系，有内嵌related,还有添加附件的mixed
+        MimeMultipart mm=new MimeMultipart();
+        mm.addBodyPart(image);
+        mm.addBodyPart(text);
+        mm.setSubType("related");
+        //需要保存到消息中
+        mimeMessage.setContent(mm);
+        mimeMessage.saveChanges();
+        //发件人
+        mimeMessage.setFrom(new InternetAddress("2324324@qq.com"));
+        //收件人
+        mimeMessage.setRecipients(Message.RecipientType.TO, String.valueOf(new InternetAddress()));
+       transport.sendMessage(mimeMessage,mimeMessage.getAllRecipients());
+       transport.close();
+
+    }
+}
