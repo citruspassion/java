@@ -8,3 +8,6 @@ list转换int数组
 一般我们转换出来的都是object
 我们要是想换必须
 list.stream().mapToInt(Integer::intValue).toArray();
+toSTRING如果想去掉中括号的话
+需要使用
+StringUtils.strip(list.toString(),"[]")
