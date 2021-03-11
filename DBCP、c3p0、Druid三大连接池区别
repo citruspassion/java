@@ -1,0 +1,7 @@
+通常情况下我们的项目如果有多个connection，如果一直获取连接，断开连接，这样比较浪费资源
+如果创建一个池，用池来管理Connection，这样就可以重复使用Connection
+有了池子就不需要创建connextion了，只用去池子里去拿就行。一旦用完调用close方法不会真的关闭而是将connection换给池子
+常用的连接池有三种，分别是：DBCP连接池、C3P0连接池和DRUID连接池；
+mybatis的事务管理器 transactionmanager 有两种不止jdbc还有managed
+虽然managed没什么太大用，从来不提交也不回滚一个链接，让容器来管理事务的生命周期
+数据源类型 datesource type pooled unpooled  jndi
