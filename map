@@ -1,0 +1,40 @@
+  HashMap<String, Integer> prices = new HashMap<>();
+   prices.put("Shoes", 200);
+ 
+ 
+ 
+ 
+ computeIfAbsent
+ 
+如果key的值不存在就使用函数结果代替；
+map.computeIfAbsent("bag",(s)->{return s+100;})
+=========================================================================
+computeIfPresent
+如果key的值存在就使用函数结果代替
+因为这时值存在的时候，所以当函数值位空，应当删除key
+
+map.computeIfPresent("haha",(key,value)->{value + value * 10/100;})
+map.computeIfPresent("haha",(key,value)->{return null;})
+
+=========================================================================
+
+ putIfAbsent
+上面都是返回函数
+现在是返回值
+ 当key的值不存在时替换key的值；
+ HashMap<Integer, String> sites = new HashMap<>();
+        sites.put(1, "Google");
+        sites.put(2, "Runoob");
+        sites.put(3, "Taobao");
+        System.out.println("sites HashMap: " + sites);
+        // HashMap 不存在该key
+        sites.putIfAbsent(4, "Weibo");
+
+        // HashMap 中存在 Key
+        sites.putIfAbsent(2, "Wiki");
+        最后key为4个  1=Google, 2=Runoob, 3=Taobao, 4=Weibo
+        
+ ==========================================================================
+ 
+ getOrDefault
+ 如果存在就返回这个值，没有就没有
