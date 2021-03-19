@@ -38,3 +38,7 @@ map.computeIfPresent("haha",(key,value)->{return null;})
  
  getOrDefault
  如果存在就返回这个值，没有就没有
+ 
+ ==========================================================================
+ merge 相当与getOrDefault和computeIfPresent的合体
+ 
