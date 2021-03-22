@@ -1,0 +1,9 @@
+ int n=123;
+     
+     System.out.println(Integer.toBinaryString(n));//1111011
+     System.out.println(Integer.bitCount(n));//6
+        long l = 219;
+        System.out.println("Binary = " + Long.toBinaryString(l));
+
+        // returns the number of one-bits
+        System.out.println("Number of one bits = " + Long.bitCount(l));
