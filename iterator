@@ -85,16 +85,17 @@ public class NestedIterator implements Iterator<Integer> {
     public boolean hasNext() {
       return cur.hasNext();
     }
-    private void dfs(List<NestedInteger> nestedList)
+    private void dfs(List<NestedInteger> nestedList){
     for(NestedInteger nest:nestedList)
     {
         if(nest.isInteger())
         {
-                list.add(nest.getInteger())
+                list.add(nest.getInteger());
         }else{
             dfs(nest.getList());
         }
     }
+}
 }
 
 /**
