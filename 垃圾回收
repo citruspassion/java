@@ -54,6 +54,13 @@
 那在第二次标记时它将会被移除出"即将回收"的集合；如果对象这时候还是没有逃脱，那基本上它就是真的被回收了
 
 
+4中垃圾清理算法
+
+1.标记清理
+2.复制    新生代 串行 并行
+3.标记整理   老年代  回收
+3，分代整理    根据存活周期的不同将内存划分为几块
+也就是分为  新生代 ，老年代
 
 
 请问了解Minor GC和Full GC么，这两种GC有什么不一样吗？
@@ -65,8 +72,9 @@ Full GC 又称为老年代GC或者Major GC : 指发生在老年代的垃圾收�
 在Parallel Scavenge收集器中就有直接进行Full GC的策略选择过程)。Major GC的速度一般会比Minor GC慢10倍以上。
 
 
-堆内存结构
-heap区分为Young Gen（新生代）、老年代Old Gen（老年代），其中新生代被分为Eden Space（伊甸区）、 Survivor Space(幸存者区)，依旧是我们常说的From/to区 。
+堆内存结构  分为permantspace heapspace  也就是持久代和heap代
+ 而permantspace  存放一些静态类型数据，如Java ，class mmethod 
+heap sapce区分为Young Gen（新生代）、老年代Old Gen（老年代），其中新生代被分为Eden Space（伊甸区）、 Survivor Space(幸存者区)，依旧是我们常说的From/to区 。
 
 
 Eden Space字面意思是伊甸园，对象被创建的时候首先放到这个区域
@@ -95,7 +103,11 @@ Full GC触发条件：
 （5）由Eden区、From Space区向To Space区复制时，对象大小大于To Space可用内存，则把该对象转存到老年代，且老年代的可用内存小于该对象大小
 
 
+年老代   溢出的原因
+循环上万次的字符串处理，创建千万个对象，在一代码中申请几百m 甚至几g的内存
 
+持久代  溢出的原因
+动态加载大量java类而溢出
 
 
 ————————————————
