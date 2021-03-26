@@ -1,0 +1,122 @@
+反射机制的定义：
+
+ 
+
+是在运行状态中，对于任意的一个类，都能够知道这个类的所有属性和方法，对任意一个对象都能够通过反射机制调用一个类的任意方法，
+这种动态获取类信息及动态调用类对象方法的功能称为java的反射机制。
+
+反射的作用：
+
+1、动态地创建类的实例，将类绑定到现有的对象中，或从现有的对象中获取类型。
+
+2、应用程序需要在运行时从某个特定的程序集中载入一个特定的类
+
+
+
+反射 一般使用 Class.forName()方法 或者.class
+
+动态代理就是实现InvocationHandler 接口；
+
+
+
+
+每个类都会产生一个对应的Class对象，也就是保存在.class文件。所有类都是在对其第一次使用时，动态加载到JVM的，当程序创建一个对类静态成员被引用时，就会加载这个类。
+
+public class TestMain {
+    public static void main(String[] args) {
+        System.out.println(XYZ.name);
+    }
+}
+
+class XYZ {
+    public static String name = "luoxn28";
+
+    static {
+        System.out.println("xyz静态块");
+    }
+
+    public XYZ() {
+        System.out.println("xyz构造了");
+    }
+}
+xyz静态块
+luoxn28
+==========================================================================
+class  man {
+
+        public static void main(String[] args) {
+           String x=XYZ.name;
+
+    }
+
+
+
+}
+class XYZ {
+    public static  String name = "luoxn28";
+
+    static {
+        System.out.println("xyz静态块");
+    }
+
+    public XYZ() {
+        System.out.println("xyz构造了");
+    }
+}
+会打印出  xyz静态块
+所以当静态成员被引用时，就会加载这个类 
+=======================================================================================
+class  man {
+
+        public static void main(String[] args) {
+           String x=XYZ.name;
+
+    }
+
+
+
+}
+class XYZ {
+    public static final String name = "luoxn28";
+
+    static {
+        System.out.println("xyz静态块");
+    }
+
+    public XYZ() {
+        System.out.println("xyz构造了");
+    }
+}
+
+就不会打印任何，因为没有被加载
+ 
+ 
+ 参考来自：https://www.cnblogs.com/luoxn28/p/5686794.html
+
+
+那么关于反射的用法上面提到了，但是使用功能”.class”来创建Class对象的引用时，不会自动初始化该Class对象，使用forName()会自动初始化该Class对象。
+
+
+使用类必须要的3步 一般有  加载 链接  初始化
+
+
+
+class  man {
+
+
+        public static void main(String[] args) throws ClassNotFoundException {
+            // 不会初始化静态块  不会打印1
+            Class clazz1 = Base.class;
+            System.out.println("------");
+            // 会初始化  打印1
+            Class clazz2 = Class.forName("zzz.Base");
+        }
+
+}
+ class Base {
+    static int num = 1;
+
+    static {
+        System.out.println( num);
+    }
+}
