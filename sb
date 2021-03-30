@@ -1,0 +1,4 @@
+count=count++等于0
+1.执行count=count（count=0）; JVM把count的值（其值为0）拷贝到临时变量区。   
+2.再执行count++;  ，
+3.当count++运行完毕，存存放在临时变量区的count=0的拷贝值（一直从未改变过）又赋给了count。所以最后结束，count还是原来的最初值。
