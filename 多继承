@@ -135,3 +135,80 @@ public class Test{
 当父类中没有无参构造函数时，子类必须调用父类有参的构造函数，因为1已经证明了 子类默认调用父类的构造方法，如果父类中没有无参的构造函数，就会出现编译错误。
 但是如果调用了父类的有参构造函数就没有错误了
 也就是super父类构造
+
+
+
+
+
+
+
+ class Father {
+    public static String staticString="父类中的静态变量";
+
+    public String str="父类中的非静态变量";
+
+    public static void staticMethod(){
+        System.out.println("父类中的静态方法");
+
+    }
+
+    public void nostaticMethod() {
+        System.out.println("父类中的非静态方法");
+
+    }
+
+}
+ class Son extends Father {
+    public static String staticString="子类中的静态变量";
+
+    public String str="子类中的非静态变量";
+    public int a=2;
+
+    public static void staticMethod(){
+        System.out.println("子类中的静态方法");
+
+    }
+
+    public void nostaticMethod() {
+        System.out.println("子类中的非静态方法");
+
+    }
+
+}
+ class  man{
+
+     public static void main(String[] args) {
+
+         Son son=new Son();
+
+         System.out.println(son.str);
+
+
+         System.out.println(son.staticString);
+
+         son.staticMethod();
+
+         son.nostaticMethod();
+
+         System.out.println("==============================");
+
+         Father f=new Son();
+
+         System.out.println(f.str);
+
+         System.out.println(f.staticString);
+
+         f.staticMethod();
+
+         f.nostaticMethod();
+
+         System.out.println("==============================");
+
+
+
+     }
+
+
+
+}
+
