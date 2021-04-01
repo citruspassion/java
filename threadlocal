@@ -1,3 +1,82 @@
-有如下场景：在多线程并发情况下，有一个共享变量，不同线程设置不同值后，各线程只想获取自己设置的值，如何实现？
+在多线程并发情况下，有一个共享变量，不同线程设置不同值后，各线程只想获取自己设置的值，如何实现？
 
-使用ThreadLocal，通过ThreadLocal实例对象的set方法设置各线程自己的值，通过ThreadLocal实例对象的get方法获取各线程自己设置的值。
+通过使用threadlocal，通过set,get可以设置和拿到自己想要地值
+
+简单地代码表示一下就是
+
+  public static void main(String[] args) {
+        final ThreadLocal threadLocal=new ThreadLocal();
+        threadLocal.set("你好");
+         System.out.println( threadLocal.get());
+         new Thread(new Runnable() {
+             @Override
+             public void run() {
+                 threadLocal.set("请问");
+                 System.out.println(threadLocal.get());
+             }
+         }).start();
+         new Thread(new Runnable() {
+             @Override
+             public void run() {
+                 threadLocal.set("吃了吗");
+                 System.out.println(threadLocal.get());
+             }
+         }).start();
+     }
+     
+     
+     
+ 源码来说
+ public void set(T value) {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        if (map != null)
+            map.set(this, value);
+        else
+            createMap(t, value);
+
+}
+首先获取当前线程 ,通过getmap拿到当前线程的属性  这个是ThreadLocalMap类型的变量
+然后判断这个变量十分为空
+不等于null，则以当前ThreadLocal实例对象为key，传入的value值为value
+等于null,那么当前调用createMap方法创建一个ThreadLocalMap实例对象，
+并以当前ThreadLocal实例对象为key，传入的value值为value存到这个ThreadLocalMap中。
+
+
+public T get() {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        if (map != null) {
+            ThreadLocalMap.Entry e = map.getEntry(this);
+            if (e != null) {
+                @SuppressWarnings("unchecked")
+                T result = (T)e.value;
+                return result;
+            }
+        }
+        return setInitialValue();
+    }
+    
+   同样是获取当前线程，，然后通过通过getmap拿到当前线程的属性 
+   然后我们既然是get方法，所以我们就得有，所以判断非空
+   然后遍历，返回value，如果是空地话就调用setInitialValue方法初始化一个ThreadLocalMap
+   
+   引用
+   
+   
+   
+ 为什么Thread类中声明的threadLocals变量是map结构的？
+
+因为每个线程都可以关联很多个ThreadLocal变量。
+
+你ThreadLocal使用不当会发生内存泄露吗？
+
+。每一个Thread维护一个ThreadLocalMap映射表，映射表的key是ThreadLocal实例，
+并且使用的是ThreadLocal的弱引用 
+因为是弱引用，所以
+————————————————
+版权声明：本文为CSDN博主「wind瑞」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/windrui/article/details/105132387
+
+
+
