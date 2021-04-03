@@ -1,0 +1,89 @@
+引用：https://blog.csdn.net/u011054333/article/details/80504154/
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Friend {
+    private String name;
+    private int age;
+}
+
+
+ ObjectMapper mapper = new ObjectMapper();
+        Friend friend = new Friend("yitian", 25);
+
+        // 写为字符串
+        String text = mapper.writeValueAsString(friend);
+        // 写为文件
+        mapper.writeValue(new File("friend.json"), friend);
+        // 写为字节流
+        byte[] bytes = mapper.writeValueAsBytes(friend);
+        System.out.println(text);
+        // 从字符串中读取
+        Friend newFriend = mapper.readValue(text, Friend.class);
+        // 从字节流中读取
+        newFriend = mapper.readValue(bytes, Friend.class);
+        // 从文件中读取
+        newFriend = mapper.readValue(new File("friend.json"), Friend.class);
+        System.out.println(newFriend);
+        
+        
+        
+          ObjectMapper mapper = new ObjectMapper();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("age", 25);
+        map.put("name", "yitian");
+        map.put("interests", new String[]{"pc games", "music"});
+
+        String text = mapper.writeValueAsString(map);
+        System.out.println(text);
+
+        Map<String, Object> map2 = mapper.readValue(text, new TypeReference<Map<String, Object>>() {
+        });
+        System.out.println(map2);
+
+        JsonNode root = mapper.readTree(text);
+        String name = root.get("name").asText();
+        int age = root.get("age").asInt();
+
+        System.out.println("name:" + name + " age:" + age);
+        
+        
+  {"name":"yitian","interests":["pc games","music"],"age":25}
+{name=yitian, interests=[pc games, music], age=25}
+name:yitian age:25
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+————————————————
+版权声明：本文为CSDN博主「过了即是客」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/u011054333/article/details/80504154/
