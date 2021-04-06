@@ -55,16 +55,17 @@ public class Friend {
 name:yitian age:25
 
         
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,false);   不使用时间戳
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        objectMapper.setDateFormat(format);  
         
         
         
+        fastjson
         
+       String str= JSON.toJsonString(friend);
         
-        
-        
-        
-        
-        
+        JSON.parseObject(str,friend.class)
         
         
         
