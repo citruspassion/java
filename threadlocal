@@ -61,7 +61,7 @@ public T get() {
    然后我们既然是get方法，所以我们就得有，所以判断非空
    然后遍历，返回value，如果是空地话就调用setInitialValue方法初始化一个ThreadLocalMap
    
-   为了解决只能每次使用remove ，或者ThreadLocal变量定义成private static，通过强引用一定能通过弱引用拿到value
+   
    
    
    
@@ -86,6 +86,9 @@ public T get() {
 因为是弱引用，所以所以gc运行就会停止，也就是一定会被清除，一旦清除就被导致key null
 但是若这个线程始终存活，value是一直存在的，无法被收回。虽然源码来看get set remove都实现了空key value地清除
 但是如果gc后  不调用get set remove地话  value是不会被清楚的
+
+
+为了解决只能每次使用remove ，或者ThreadLocal变量定义成private static，通过强引用一定能通过弱引用拿到value
 ————————————————
 版权声明：本文为CSDN博主「wind瑞」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
 原文链接：https://blog.csdn.net/windrui/article/details/105132387
